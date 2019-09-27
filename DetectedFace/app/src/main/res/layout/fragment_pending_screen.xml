@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5">
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewImage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"></androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:fontFamily="@font/lato_light"
+            android:gravity="center_vertical"
+            android:padding="3dp"
+            android:text="Information"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/textSizeInfomation"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:fontFamily="@font/lato_light"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text="Full Name"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/textSizeTitle"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtFullName"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="2"
+                android:fontFamily="@font/lato_light"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text="Nguyen Van A"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/textSizeTitle"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:fontFamily="@font/lato_light"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text="Address"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/textSizeTitle"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtAddress"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="2"
+                android:fontFamily="@font/lato_light"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text="Ha Noi"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/textSizeTitle"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:fontFamily="@font/lato_light"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text="Time"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/textSizeTitle"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtTime"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="2"
+                android:fontFamily="@font/lato_light"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text="2019-09-23 09:07:43"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/textSizeTitle"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

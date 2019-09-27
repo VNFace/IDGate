@@ -1,0 +1,34 @@
+package com.enogy.detectedface.fragment;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.enogy.detectedface.R;
+import com.enogy.detectedface.adapter.AdapterEmployee;
+
+public class FragmentGuestManager extends Fragment {
+    private RecyclerView recyclerView;
+    private AdapterEmployee adapterEmployee;
+
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_guest_manager, container, false);
+        recyclerView = view.findViewById(R.id.recyclerViewEmployee);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+
+
+        return view;
+    }
+
+
+}

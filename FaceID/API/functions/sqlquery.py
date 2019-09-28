@@ -44,6 +44,11 @@ def sql_query(query):
     rows = cur.fetchall()
     return rows
 
+def sql_query_process(query):
+    cur = conn.cursor()
+    cur.execute(query)
+    conn.commit();
+
 def sql_edit_insert(query,var):
     cur = conn.cursor()
     cur.execute(query,var)

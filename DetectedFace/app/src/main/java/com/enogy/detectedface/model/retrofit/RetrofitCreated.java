@@ -13,16 +13,16 @@ public class RetrofitCreated {
     public static retrofit2.Retrofit retrofit;
 
     public static retrofit2.Retrofit createRetrofit() {
-        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(50, TimeUnit.SECONDS)
-                .writeTimeout(50, TimeUnit.SECONDS)
-                .readTimeout(50, TimeUnit.SECONDS)
-                .build();
+//        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+//                .connectTimeout(50, TimeUnit.SECONDS)
+//                .writeTimeout(50, TimeUnit.SECONDS)
+//                .readTimeout(50, TimeUnit.SECONDS)
+//                .build();
 
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .client(okHttpClient)
-                    .baseUrl(Config.API_GET_EMPLOYEE_NEW)
+//                    .client(okHttpClient)
+                    .baseUrl(Config.BASE_API)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }

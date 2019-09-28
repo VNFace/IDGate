@@ -1,0 +1,7 @@
+,ID_Emp,FullName,Address,email,phone,position,Finger,trainedCount
+0,NV002,Nguyen,Hoàng Mai - Hà Nội,sdf,,1,,
+1,NV003,TEST,,,,,,
+2,NV004,TEST 2,,,,,,
+3,NV005,TEST_3,,,,,,
+4,NV006,Test,Hanoi,test@gmail.com,123123,1,,
+5,NV007,Test,,,,,,

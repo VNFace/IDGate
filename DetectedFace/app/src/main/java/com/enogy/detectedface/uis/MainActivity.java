@@ -11,6 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,7 @@ import com.enogy.detectedface.adapter.AdapterViewPager;
 import com.enogy.detectedface.fragment.FragmentGuestManager;
 import com.enogy.detectedface.fragment.FragmentHistory;
 import com.enogy.detectedface.fragment.FragmentPendingScreen;
+import com.enogy.detectedface.uis.activities.AddNewEmployeeActivity;
 import com.enogy.detectedface.utils.Config;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -44,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private AdapterViewPager adapterViewPager;
     private TabLayout tabLayout;
     private NavigationView navigationView;
+    private ImageView imgViewAddNew;
+    private SharedPreferences sharedPreferences;
 
 //    private Broa
 
@@ -58,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
         txtTitleToolbar = findViewById(R.id.txtTitleToolbar);
         navigationView = findViewById(R.id.navigationView);
         imgMenu = findViewById(R.id.imgViewMenu);
+        imgViewAddNew = findViewById(R.id.imgViewAddNewEmployee);
+
+        sharedPreferences = getSharedPreferences(Config.LOGIN, Context.MODE_PRIVATE);
 
         setupViewPager();
         setSupportActionBar(toolbar);
@@ -69,12 +76,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        imgViewAddNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, AddNewEmployeeActivity.class));
+            }
+        });
+
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.itemLogout: {
+                        sharedPreferences.edit().putInt(Config.STATE_LOGIN, Config.STATE_LOGIN_FALSE).commit();
                         finish();
                     }
                     break;
@@ -157,6 +172,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
+        finish();
     }
 }

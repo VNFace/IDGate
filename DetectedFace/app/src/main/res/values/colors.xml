@@ -7,5 +7,6 @@
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorTabSelected">#637D96</color>
+    <color name="colorGreen">#E9188A1A</color>
     <!--<color name=""-->
 </resources>

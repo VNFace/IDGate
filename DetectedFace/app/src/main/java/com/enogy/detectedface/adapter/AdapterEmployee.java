@@ -3,6 +3,7 @@ package com.enogy.detectedface.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.enogy.detectedface.R;
 import com.enogy.detectedface.listener.OnEmployeeListener;
 import com.enogy.detectedface.model.remote.Employee;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterEmployee extends RecyclerView.Adapter<AdapterEmployee.EmployeeHolder> {
@@ -28,10 +30,15 @@ public class AdapterEmployee extends RecyclerView.Adapter<AdapterEmployee.Employ
     private List<Employee> list;
     private OnEmployeeListener onEmployeeListener;
 
-    public AdapterEmployee(Context context, List<Employee> list, OnEmployeeListener onEmployeeListener) {
+    public AdapterEmployee(Context context, OnEmployeeListener onEmployeeListener) {
         this.context = context;
-        this.list = list;
+        this.list = new ArrayList<>();
         this.onEmployeeListener = onEmployeeListener;
+    }
+
+    public void setList(List<Employee> list1){
+        this.list = list1;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -44,10 +51,25 @@ public class AdapterEmployee extends RecyclerView.Adapter<AdapterEmployee.Employ
     @Override
     public void onBindViewHolder(@NonNull EmployeeHolder holder, int position) {
         final Employee employee = list.get(position);
-        holder.txtName.setText(employee.getFullName());
-        holder.txtAddress.setText(employee.getAddress());
-        holder.txtEmail.setText(employee.getEmail());
-        holder.txtPhone.setText(employee.getPhone());
+        if (!TextUtils.isEmpty(employee.getFullName())) {
+            holder.txtName.setText(employee.getFullName());
+        }else{
+            holder.txtName.setText("Unknown");
+        }
+        if (!TextUtils.isEmpty(employee.getAddress())) {
+            holder.txtAddress.setText(employee.getAddress());
+        }else{
+            holder.txtAddress.setText("Unknown");
+        }
+        if (!TextUtils.isEmpty(employee.getEmail())) {
+            holder.txtEmail.setText(employee.getEmail());
+        }else{
+            holder.txtEmail.setText("Unknown");
+        }
+        if (!TextUtils.isEmpty(employee.getPhone())) {
+            holder.txtPhone.setText(employee.getPhone());
+        }else
+            holder.txtPhone.setText("Unknown");
 
         holder.cardViewEmployee.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +99,7 @@ public class AdapterEmployee extends RecyclerView.Adapter<AdapterEmployee.Employ
             txtName = itemView.findViewById(R.id.txtNameEmployee);
             txtPhone = itemView.findViewById(R.id.txtPhoneEmployee);
             txtEmail = itemView.findViewById(R.id.txtEmailEmployee);
-            txtAddress = itemView.findViewById(R.id.txtAddress);
+            txtAddress = itemView.findViewById(R.id.txtAddressEmployee);
             cardViewEmployee = itemView.findViewById(R.id.cardViewEmployee);
 
 

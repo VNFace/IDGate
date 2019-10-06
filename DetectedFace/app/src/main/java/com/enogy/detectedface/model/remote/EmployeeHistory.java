@@ -24,6 +24,18 @@ public class EmployeeHistory {
     @Expose
     private String idEmp;
 
+    @SerializedName("image")
+    @Expose
+    private String image;
+
+    public void setImage(String image){
+        this.image = image;
+    }
+
+    public String getImage(){
+        return image;
+    }
+
     public String getFullName() {
         return fullName;
     }
@@ -64,11 +76,14 @@ public class EmployeeHistory {
         this.idEmp = idEmp;
     }
 
-    public EmployeeHistory(String fullName, int idEmpHis, String confident, String eTime, String idEmp) {
+    public EmployeeHistory(String fullName, int idEmpHis,
+                           String confident, String eTime,
+                           String idEmp, String image) {
         this.fullName = fullName;
         this.idEmpHis = idEmpHis;
         this.confident = confident;
         this.eTime = eTime;
         this.idEmp = idEmp;
+        this.image = image;
     }
 }

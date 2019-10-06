@@ -32,7 +32,8 @@ public class FragmentGuestManager extends Fragment implements OnEmployeeListener
     private RecyclerView recyclerView;
     private AdapterEmployee adapterEmployee;
     private SharedPreferences sharedPreferences;
-    private Call<DataEmployee> call;
+//    private Call<DataEmployee> call;
+    private String baseApi;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -46,20 +47,8 @@ public class FragmentGuestManager extends Fragment implements OnEmployeeListener
         recyclerView = view.findViewById(R.id.recyclerViewEmployee);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         setupRecyclerView();
-        sharedPreferences = getActivity().getSharedPreferences(Config.EMPLOYEE, Context.MODE_PRIVATE);
-        call = RetrofitCreated.createApi().getDataEmployee();
-        call.enqueue(new Callback<DataEmployee>() {
-            @Override
-            public void onResponse(Call<DataEmployee> call, Response<DataEmployee> response) {
-                adapterEmployee.setList(response.body().getList());
-            }
-
-            @Override
-            public void onFailure(Call<DataEmployee> call, Throwable t) {
-
-            }
-        });
-
+        sharedPreferences = getActivity().getSharedPreferences(Config.NAME, Context.MODE_PRIVATE);
+        baseApi = sharedPreferences.getString(Config.BASE_API, "");
         return view;
     }
 
@@ -71,6 +60,18 @@ public class FragmentGuestManager extends Fragment implements OnEmployeeListener
     @Override
     public void onResume() {
         super.onResume();
+        Call<DataEmployee> call = RetrofitCreated.createApi(baseApi).getDataEmployee();
+        call.enqueue(new Callback<DataEmployee>() {
+            @Override
+            public void onResponse(Call<DataEmployee> call, Response<DataEmployee> response) {
+                adapterEmployee.setList(response.body().getList());
+            }
+
+            @Override
+            public void onFailure(Call<DataEmployee> call, Throwable t) {
+
+            }
+        });
 
     }
 

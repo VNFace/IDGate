@@ -9,9 +9,11 @@ import com.google.gson.JsonElement;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface Api {
@@ -24,6 +26,9 @@ public interface Api {
 
     @GET("employee")
     Call<DataEmployee> getDataEmployee();
+
+    @GET("idmax")
+    Call<DataEmployee> getIDmax();
 
     //get history of employee by date time
     @GET("history")
@@ -46,5 +51,17 @@ public interface Api {
                                   @Query("email") String email,
                                   @Query("phone") String phone,
                                   @Query("position") String position);
+
+    @PUT("update")
+    Call<Employee> editEmployee(@Query("idEmp") String idEmp,
+                                @Query("fullName") String fullName,
+                                @Query("address") String address,
+                                @Query("email") String email,
+                                @Query("phone") String phone,
+                                @Query("position") String position);
+
+    @DELETE("delete")
+    Call<Employee> deleteEmployee(@Query("idEmp") String idEmp);
+
 
 }

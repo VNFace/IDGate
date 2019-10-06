@@ -35,8 +35,8 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
     private EditText edUserName;
     private EditText edPassword;
-    //    private EditText edIpAdress;
-//    private EditText edPort;
+    private EditText edIpAdress;
+    private EditText edPort;
     private TextView btnSignIn;
     private ImageView imgLogin;
     private String userName;
@@ -46,6 +46,8 @@ public class LoginActivity extends AppCompatActivity {
     private List<Account> accountList;
     private SharedPreferences sharedPreferences;
     private int stateLogin;
+    private String ipAddress;
+    private String ports;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +55,17 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         edUserName = findViewById(R.id.edUserName);
         edPassword = findViewById(R.id.edPass);
-//        edIpAdress = findViewById(R.id.edIPAdress);
-//        edPort = findViewById(R.id.edPort);
+        edIpAdress = findViewById(R.id.edIPAdress);
+        edPort = findViewById(R.id.edPort);
         btnSignIn = findViewById(R.id.btnSignIn);
         imgLogin = findViewById(R.id.imageViewLogin);
 
 
-        sharedPreferences = getSharedPreferences(Config.LOGIN, Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(Config.NAME, Context.MODE_PRIVATE);
+        edPort.setText(sharedPreferences.getString(Config.PORT, ""));
+        edIpAdress.setText(sharedPreferences.getString(Config.IP_ADDRESS, ""));
         stateLogin = sharedPreferences.getInt(Config.STATE_LOGIN, 0);
+        Log.e("TAG", " stateLogin " + stateLogin);
         if (stateLogin == Config.STATE_LOGIN_TRUE) {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
         } else {
@@ -70,51 +75,41 @@ public class LoginActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     userName = edUserName.getText().toString().trim();
                     pass = edPassword.getText().toString().trim();
-//                ipAdress = edIpAdress.getText().toString().trim();
-//                port = edPort.getText().toString().trim();
+                    ipAdress = edIpAdress.getText().toString().trim();
+                    port = edPort.getText().toString().trim();
                     if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(pass)) {
                         Toast.makeText(LoginActivity.this, "Please fill infomation", Toast.LENGTH_SHORT).show();
                     } else {
-                        for (Account a : accountList) {
-                            if (a.getUserName().equals(userName) && a.getPass().equals(pass)) {
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            } else {
-                                Toast.makeText(LoginActivity.this, "Information incorrect", Toast.LENGTH_SHORT).show();
+                        String baseApi = "http://" + edIpAdress.getText().toString().trim() + ":" + edPort.getText().toString().trim() + "/";
+                        sharedPreferences.edit().putString(Config.BASE_API, baseApi).commit();
+                        sharedPreferences.edit().putString(Config.IP_ADDRESS, ipAdress).commit();
+                        sharedPreferences.edit().putString(Config.PORT, port).commit();
+                        Call<DataAccount> call = RetrofitCreated.createApi(baseApi).getAllAccount();
+                        call.enqueue(new Callback<DataAccount>() {
+                            @Override
+                            public void onResponse(Call<DataAccount> call, Response<DataAccount> response) {
+                                for (Account a : response.body().getList()) {
+                                    if (a.getUserName().equals(userName) && a.getPass().equals(pass)) {
+                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                        sharedPreferences.edit().putInt(Config.STATE_LOGIN, Config.STATE_LOGIN_TRUE).commit();
+                                        finish();
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, "Information incorrect", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
                             }
-                        }
+
+                            @Override
+                            public void onFailure(Call<DataAccount> call, Throwable t) {
+
+                            }
+                        });
+
                     }
                 }
             });
 
 
-            Call<DataAccount> call = RetrofitCreated.createApi().getAllAccount();
-            call.enqueue(new Callback<DataAccount>() {
-                @Override
-                public void onResponse(Call<DataAccount> call, Response<DataAccount> response) {
-                    accountList = response.body().getList();
-                }
-
-                @Override
-                public void onFailure(Call<DataAccount> call, Throwable t) {
-
-                }
-            });
-
-            Call<DataEmployee> call1 = RetrofitCreated.createApi().getEmployeeByDate("2019-09-22");
-            call1.enqueue(new Callback<DataEmployee>() {
-                @Override
-                public void onResponse(Call<DataEmployee> call, Response<DataEmployee> response) {
-                    Log.e("TAG", " r " + response.body().getList().size());
-                    for (Employee e : response.body().getList()) {
-                        Log.e("TAG", "name " + e.getFullName());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<DataEmployee> call, Throwable t) {
-
-                }
-            });
         }
 
     }

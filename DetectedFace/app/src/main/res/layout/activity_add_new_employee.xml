@@ -70,6 +70,7 @@
                 android:layout_weight="5"
                 android:fontFamily="@font/lato_light"
                 android:gravity="center_vertical"
+                android:enabled="false"
                 android:hint="ID Employee ..."
                 android:textSize="20sp"
                 android:textStyle="bold" />

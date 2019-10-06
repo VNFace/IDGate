@@ -1,5 +1,5 @@
 package com.enogy.detectedface.listener;
 
 public interface OnImageListener {
-    void onImageClicked(int image);
+    void onImageClicked(String image);
 }

@@ -34,6 +34,7 @@ public class InformationEmployeeActivity extends AppCompatActivity implements Vi
     private Toolbar toolbar;
     private String idEmployee;
     private SharedPreferences preferences;
+    private String baseApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,20 +50,24 @@ public class InformationEmployeeActivity extends AppCompatActivity implements Vi
         imgDelete = findViewById(R.id.imgViewDeleteEmployee);
         txtOk = findViewById(R.id.txtActionOkInformation);
 
-        preferences = getSharedPreferences(Config.EMPLOYEE, Context.MODE_PRIVATE);
+        preferences = getSharedPreferences(Config.NAME, Context.MODE_PRIVATE);
         idEmployee = preferences.getString(Config.ID_EMPLOYEE, "");
-
-        Call<DataEmployee> call = RetrofitCreated.createApi().getEmployeeByID(idEmployee);
+        baseApi = preferences.getString(Config.BASE_API, "");
+        Call<DataEmployee> call = RetrofitCreated.createApi(baseApi).getEmployeeByID(idEmployee);
         Log.e("TAG", "idemployee " + idEmployee);
         call.enqueue(new Callback<DataEmployee>() {
             @Override
             public void onResponse(Call<DataEmployee> call, Response<DataEmployee> response) {
+                for (Employee e : response.body().getList()) {
+                    Log.e("TAG", " e " + e.getAddress());
+                }
                 Employee employee = response.body().getList().get(0);
                 edFullName.setText(employee.getFullName());
                 edAddress.setText(employee.getAddress());
                 edEmail.setText(employee.getEmail());
                 edPhone.setText(employee.getPhone());
                 edPosition.setText(employee.getPosition());
+
             }
 
             @Override
@@ -76,12 +81,42 @@ public class InformationEmployeeActivity extends AppCompatActivity implements Vi
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.txtActionOkInformation : {
+        switch (view.getId()) {
+            case R.id.txtActionOkInformation: {
+                String fullNam = edFullName.getText().toString().trim();
+                String address = edAddress.getText().toString().trim();
+                String email = edEmail.getText().toString().trim();
+                String phone = edPhone.getText().toString().trim();
+                String position = edPosition.getText().toString().trim();
+                Call<Employee> call = RetrofitCreated.createApi(baseApi).editEmployee(idEmployee,
+                        fullNam, address, email, phone, position);
+                call.enqueue(new Callback<Employee>() {
+                    @Override
+                    public void onResponse(Call<Employee> call, Response<Employee> response) {
+                        finish();
+                    }
 
-            } break;
-            case R.id.imgViewDeleteEmployee : {
+                    @Override
+                    public void onFailure(Call<Employee> call, Throwable t) {
 
+                    }
+                });
+            }
+            break;
+            case R.id.imgViewDeleteEmployee: {
+                Call<Employee> call = RetrofitCreated.createApi(baseApi).deleteEmployee(idEmployee);
+                call.enqueue(new Callback<Employee>() {
+                    @Override
+                    public void onResponse(Call<Employee> call, Response<Employee> response) {
+                        finish();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Employee> call, Throwable t) {
+
+                    }
+                });
             } break;
         }
     }

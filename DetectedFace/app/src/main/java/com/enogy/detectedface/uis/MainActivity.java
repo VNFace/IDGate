@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +27,8 @@ import com.enogy.detectedface.adapter.AdapterViewPager;
 import com.enogy.detectedface.fragment.FragmentGuestManager;
 import com.enogy.detectedface.fragment.FragmentHistory;
 import com.enogy.detectedface.fragment.FragmentPendingScreen;
+import com.enogy.detectedface.model.remote.DataEmployee;
+import com.enogy.detectedface.model.retrofit.RetrofitCreated;
 import com.enogy.detectedface.uis.activities.AddNewEmployeeActivity;
 import com.enogy.detectedface.utils.Config;
 import com.google.android.material.navigation.NavigationView;
@@ -48,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private ImageView imgViewAddNew;
     private SharedPreferences sharedPreferences;
-
+    private String baseApi;
 //    private Broa
 
     @Override
@@ -64,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
         imgMenu = findViewById(R.id.imgViewMenu);
         imgViewAddNew = findViewById(R.id.imgViewAddNewEmployee);
 
-        sharedPreferences = getSharedPreferences(Config.LOGIN, Context.MODE_PRIVATE);
-
+        sharedPreferences = getSharedPreferences(Config.NAME, Context.MODE_PRIVATE);
+        baseApi = sharedPreferences.getString(Config.BASE_API, "");
         setupViewPager();
         setSupportActionBar(toolbar);
 

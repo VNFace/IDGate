@@ -16,31 +16,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.enogy.detectedface.R;
 import com.enogy.detectedface.listener.OnImageListener;
+import com.enogy.detectedface.model.remote.EmployeeHistory;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class AdapterImage extends RecyclerView.Adapter<AdapterImage.ImageHolder> {
     private Context context;
     private LayoutInflater inflater;
     private OnImageListener listener;
-    private List<Integer> list;
+    private List<EmployeeHistory> list;
     private int height;
 
     public AdapterImage(Context context, OnImageListener listener) {
         this.context = context;
         this.listener = listener;
-        list = getList();
-    }
-
-    private List<Integer> getList(){
-        List<Integer> list = new ArrayList<>();
-        list.add(R.drawable.test);
-        list.add(R.drawable.test2);
-        list.add(R.drawable.test3);
-        list.add(R.drawable.test4);
-        list.add(R.drawable.test5);
-        return list;
+        list = new ArrayList<>();
     }
 
     @NonNull
@@ -57,17 +49,16 @@ public class AdapterImage extends RecyclerView.Adapter<AdapterImage.ImageHolder>
 
     @Override
     public void onBindViewHolder(@NonNull ImageHolder holder, final int position) {
-        final Integer image = list.get(position);
+        final EmployeeHistory image = list.get(position);
         Log.e("TAG", "image " + image);
 //        Glide.with(context).load(image).into(holder.imgView);
-        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), image);
-        holder.imgView.setImageBitmap(Bitmap.createScaledBitmap(bitmap,
+        holder.imgView.setImageBitmap(Bitmap.createScaledBitmap(decodeBase64(image.getImage()),
                 height, height, false));
 //        holder.imgView.setImageResource(image);
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onImageClicked(image);
+                listener.onImageClicked(image.getImage());
             }
         });
     }
@@ -87,5 +78,11 @@ public class AdapterImage extends RecyclerView.Adapter<AdapterImage.ImageHolder>
         }
     }
 
+    private Bitmap decodeBase64(String s){
+        byte[] decodedString = android.util.Base64.decode(s, android.util.Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        return decodedByte;
+
+    }
 
 }

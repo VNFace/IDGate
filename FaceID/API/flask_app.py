@@ -15,6 +15,8 @@ import json
 import tablib
 import csv
 import pandas as pd
+from cryptography.fernet import Fernet
+
 
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -28,19 +30,24 @@ app = Flask(__name__)
 @app.route("/people", methods=["GET"])
 def getPeopl():
     from functions.sqlquery import sql_query,sql_query_export    
-    results = sql_query(''' SELECT * FROM Employee_History ORDER BY time DESC LIMIT 1''')
+    results = sql_query(''' SELECT * FROM Employee_History ORDER BY time DESC LIMIT 3''')
     data = []
     idx = 0;
     image = {}
     for row in results :
         # correct
-        data.append({'FullName' : row["FullName"], 
-            'etime ' : datetime.strptime(row["time"],"%Y-%m-%d %H:%M:%S"),
-            'ID_Emp_His' : row["ID_Emp_His"],
-            'id_emp' : row["id_emp"],
-            'confident' : row["confident"]})
+        filename = row["url_history"]  # I assume you have a way of picking unique filenames        
+        with open(filename, 'rb') as imgFile:
+            test = base64.b64encode(imgFile.read())
+            byte_test = test.decode("utf-8")
+            test2 =   byte_test 
+            data.append({'FullName' : row["FullName"], 
+                'etime ' : datetime.strptime(row["time"],"%Y-%m-%d %H:%M:%S"),
+                'ID_Emp_His' : row["ID_Emp_His"],
+                'id_emp' : row["id_emp"],
+                'confident' : row["confident"],
+                'image' : test2})
     return jsonify({'data' : data, 'message' : 'sucess'})
-
 
 
 # get all employee
@@ -116,6 +123,19 @@ def login():
             'password' : row["password"]})
     return jsonify({'message' : "success", 'account' : account})
 
+@app.route("/idmax", methods=["GET"])
+def getIdMax():
+    from functions.sqlquery import sql_query, sql_query_export
+    results = sql_query("SELECT * FROM Employee ORDER BY ID_Emp DESC LIMIT 1")
+    account = []
+    for row in results :
+        account.append({'ID_Emp' : row["ID_Emp"],
+            'FullName' : row["FullName"],
+            'Address' : row["address"],
+            'email' : row["email"],
+            'phone' : row["phone"],
+            'position' : row["position"]})
+    return jsonify({'message' : "success", 'employee' : account})
 
 # get information employee by id
 @app.route("/information", methods=["GET"])
@@ -129,7 +149,7 @@ def information():
     for row in employee :
         information.append({'ID_Emp' : row["ID_Emp"],
             'FullName' : row["FullName"],
-            'address' : row["address"],
+            'Address' : row["address"],
             'email' : row["email"],
             'phone' : row["phone"],
             'position' : row["position"]})
@@ -137,10 +157,10 @@ def information():
 
 @app.route("/delete", methods=["DELETE"])
 def deleteEmployee():
-    from functions.sqlquery import sql_query, sql_query_export
-    arg1 = request.args['arg1']
-    sql_query("DELETE FROM Employee WHERE ID_Emp = " + '"' + arg1 + '"')
-
+    from functions.sqlquery import sql_query, sql_query_export, sql_query_process
+    arg1 = request.args['idEmp']
+    sql_query_process("DELETE FROM Employee WHERE ID_Emp = " + '"' + arg1 + '"')
+    print("DELETE FROM Employee WHERE ID_Emp = " + '"' + arg1 + '"')
     # delete employee in table employee_history
     # sql_query("DELETE FROM Employee_History WHERE ID_Emp = " + '"' + arg1 + '"')
     return {'message' : "delete success"}
@@ -149,20 +169,26 @@ def deleteEmployee():
 # Update employee
 @app.route("/update", methods=["PUT"])
 def update_employee():
-    from functions.sqlquery import sql_query, sql_query_export
-    fullName = request.args['arg1']
-    idEmp = request.args['arg2']
-        # address = request.args['arg2']
-        # email = request.args['arg3']
-        # phone = request.args['arg4']
-        # position = request.args['arg5']
-    sql_query("UPDATE Employee SET FullName = " + '"' + fullName + '"' +
-        "WHERE ID_Emp = " + '"' + idEmp + '"')
-         # +
-         #    "address = " + '"' + address + '"' + 
-         #    "email = " + '"' + email + '"' +
-         #    "phone = " + '"' + phone + '"' + 
-         #    "position = " + '"' + position + '"')
+    from functions.sqlquery import sql_query, sql_query_export, sql_query_process
+    fullName = request.args['fullName']
+    idEmp = request.args['idEmp']
+    address = request.args['address']
+    email = request.args['email']
+    phone = request.args['phone']
+    position = request.args['position']
+    sql_query_process("UPDATE Employee SET FullName = " + '"' + fullName + '"' +
+            ",address = " + '"' + address + '"' + 
+            ",email = " + '"' + email + '"' +
+            ",phone = " + '"' + phone + '"' + 
+            ",position = " + '"' + position + '"' +
+        " WHERE ID_Emp = " + '"' + idEmp + '"')
+
+    print("UPDATE Employee SET FullName = " + '"' + fullName + '"' +
+            ",address = " + '"' + address + '"' + 
+            ",email = " + '"' + email + '"' +
+            ",phone = " + '"' + phone + '"' + 
+            ",position = " + '"' + position + '"' +
+        " WHERE ID_Emp = " + '"' + idEmp + '"')
     return {'message' : "update success"}
 
 

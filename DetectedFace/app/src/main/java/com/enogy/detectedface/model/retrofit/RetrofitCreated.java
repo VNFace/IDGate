@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitCreated {
     public static retrofit2.Retrofit retrofit;
 
-    public static retrofit2.Retrofit createRetrofit() {
+    public static retrofit2.Retrofit createRetrofit(String BASE_API) {
 //        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
 //                .connectTimeout(50, TimeUnit.SECONDS)
 //                .writeTimeout(50, TimeUnit.SECONDS)
@@ -22,7 +22,7 @@ public class RetrofitCreated {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
 //                    .client(okHttpClient)
-                    .baseUrl(Config.BASE_API)
+                    .baseUrl(BASE_API)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
@@ -30,7 +30,7 @@ public class RetrofitCreated {
 
     }
 
-    public static Api createApi() {
-        return createRetrofit().create(Api.class);
+    public static Api createApi(String BASE_API) {
+        return createRetrofit(BASE_API).create(Api.class);
     }
 }
